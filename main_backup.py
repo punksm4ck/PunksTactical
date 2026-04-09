@@ -1,3 +1,4 @@
+"© 2026 Punksm4ck. All rights reserved."
 """
 PUNKS OMNI DASHBOARD — Android APK Port
 Kivy + KivyMD | Buildozer target: android
