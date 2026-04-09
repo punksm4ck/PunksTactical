@@ -1,6 +1,7 @@
 "© 2026 Punksm4ck. All rights reserved."
 "© 2026 Punksm4ck. All rights reserved."
 "© 2026 Punksm4ck. All rights reserved."
+"© 2026 Punksm4ck. All rights reserved."
 """
 PUNKS OMNI DASHBOARD - main.py
 Single-WebView architecture: all 4 tabs rendered as HTML/Leaflet/Chart.js,
