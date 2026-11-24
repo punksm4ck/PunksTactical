@@ -25,7 +25,7 @@ android.permissions = INTERNET, ACCESS_NETWORK_STATE, ACCESS_WIFI_STATE, WAKE_LO
 android.minapi = 21
 android.api    = 33
 android.ndk    = 25b
-android.archs  = arm64-v8a, armeabi-v7a
+android.archs = arm64-v8a
 
 # cleartext HTTP for localhost:45678 BridgeServer is handled in Python via
 # setMixedContentMode(0) on the WebView — no manifest entry needed.
