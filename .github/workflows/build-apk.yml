@@ -50,11 +50,14 @@ jobs:
           set -e
           if [ -f "configure.ac" ]; then
             mkdir -p m4
-            if compgen -G "/usr/share/aclocal/lt*.m4" > /dev/null; then
-              cp -f /usr/share/aclocal/lt*.m4 m4/
+            if [ -f "/usr/share/aclocal/ltsymbol.m4" ]; then
+              cp -f /usr/share/aclocal/ltsymbol.m4 m4/
+              if [ -f "aclocal.m4" ] && ! grep -q "LT_SYS_SYMBOL_USCORE" aclocal.m4; then
+                cat /usr/share/aclocal/ltsymbol.m4 >> aclocal.m4
+              fi
+            elif [ -f "aclocal.m4" ] && ! grep -q "LT_SYS_SYMBOL_USCORE" aclocal.m4; then
+              printf '\nm4_ifndef([LT_SYS_SYMBOL_USCORE], [AC_DEFUN([LT_SYS_SYMBOL_USCORE], [])])\n' >> aclocal.m4
             fi
-            libtoolize --force --copy
-            aclocal -I m4 -I /usr/share/aclocal --force
           fi
           exec /usr/bin/autoreconf "$@"
           AUTORECONF_EOF
