@@ -888,6 +888,7 @@ function switchTab(n) {{
   if (n===1 && !mapsInited[1]) {{ initAiMap();    mapsInited[1]=true; }}
   if (n===2 && !mapsInited[2]) {{ initFeedMap();  mapsInited[2]=true; }}
   if (n===3) {{ renderChart(); }}
+  setTimeout(function(){{ if(n===0&&mapMain) mapMain.invalidateSize(); if(n===1&&aiMap) aiMap.invalidateSize(); if(n===2&&feedMap) feedMap.invalidateSize(); }}, 150);
 }}
 
 // ── Clock ──────────────────────────────────────────────────────────────
@@ -1010,8 +1011,8 @@ var DRI_DATA = [
 
 function initMapMain() {{
   mapMain = L.map('mapMain', {{zoomControl:true}}).setView([39.8,-98.5],4);
-  L.tileLayer('https://{{s}}.basemaps.cartocdn.com/dark_all/{{z}}/{{x}}/{{y}}{{r}}.png',
-    {{attribution:'CartoDB'}}).addTo(mapMain);
+  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{{z}}/{{y}}/{{x}}',
+    {{attribution:'Esri',maxZoom:16}}).addTo(mapMain);
   rptMarkers = L.layerGroup().addTo(mapMain);
   renderDriMarkers();
   // User report markers
@@ -1125,8 +1126,8 @@ function getAiColor(status) {{
 var aiCurrentFilter = 'all';
 function initAiMap() {{
   aiMap = L.map('aiMap',{{zoomControl:true}}).setView([39.8,-98.5],4);
-  L.tileLayer('https://{{s}}.basemaps.cartocdn.com/dark_all/{{z}}/{{x}}/{{y}}{{r}}.png',
-    {{attribution:'CartoDB'}}).addTo(aiMap);
+  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{{z}}/{{y}}/{{x}}',
+    {{attribution:'Esri',maxZoom:16}}).addTo(aiMap);
   renderAiMarkers();
 }}
 
@@ -1164,8 +1165,8 @@ function resetAiFilters() {{ aiFilter('status','all'); }}
 var feedMap;
 function initFeedMap() {{
   feedMap = L.map('feedMap',{{zoomControl:true}}).setView([39.8,-98.5],4);
-  L.tileLayer('https://{{s}}.basemaps.cartocdn.com/dark_all/{{z}}/{{x}}/{{y}}{{r}}.png',
-    {{attribution:'CartoDB'}}).addTo(feedMap);
+  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{{z}}/{{y}}/{{x}}',
+    {{attribution:'Esri',maxZoom:16}}).addTo(feedMap);
   {feed_markers_js}
   // CONUS border
   var conus = {json.dumps(CONUS_POLYGON)};
