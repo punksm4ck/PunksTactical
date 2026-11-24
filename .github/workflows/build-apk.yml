@@ -40,6 +40,7 @@ jobs:
       - name: Build debug APK
         env:
           BUILDOZER_WARN_ON_ROOT: "0"
+          ACLOCAL_PATH: "/usr/share/aclocal"
         run: |
           export PATH="$HOME/.local/bin:$PATH"
           yes | buildozer android debug
