@@ -40,6 +40,8 @@ jobs:
       - name: Build debug APK
         env:
           BUILDOZER_WARN_ON_ROOT: "0"
+          VIRTUALENV_PIP: "bundle"
+          VIRTUALENV_NO_DOWNLOAD: "1"
           ACLOCAL_PATH: "/usr/share/aclocal"
           ACLOCAL: "aclocal -I /usr/share/aclocal"
           AUTORECONF: "${{ runner.temp }}/autoreconf-lt.sh"
@@ -63,6 +65,7 @@ jobs:
           AUTORECONF_EOF
           sudo chmod +x /usr/bin/autoreconf
           export PATH="$HOME/.local/bin:$PATH"
+          rm -rf .buildozer/android/platform/build-*/build/venv
           yes | buildozer android debug
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
