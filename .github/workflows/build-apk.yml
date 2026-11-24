@@ -42,7 +42,17 @@ jobs:
           BUILDOZER_WARN_ON_ROOT: "0"
           ACLOCAL_PATH: "/usr/share/aclocal"
           ACLOCAL: "aclocal -I /usr/share/aclocal"
+          AUTORECONF: "${{ runner.temp }}/autoreconf-lt.sh"
         run: |
+          cat <<'AUTORECONF_EOF' > "${{ runner.temp }}/autoreconf-lt.sh"
+#!/usr/bin/env bash
+set -e
+if [ -d "m4" ] && compgen -G "/usr/share/aclocal/lt*.m4" > /dev/null; then
+  cp -f /usr/share/aclocal/lt*.m4 m4/
+fi
+exec /usr/bin/autoreconf "$@"
+AUTORECONF_EOF
+          chmod +x "${{ runner.temp }}/autoreconf-lt.sh"
           export PATH="$HOME/.local/bin:$PATH"
           yes | buildozer android debug
 
