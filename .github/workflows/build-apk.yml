@@ -41,6 +41,7 @@ jobs:
         env:
           BUILDOZER_WARN_ON_ROOT: "0"
           ACLOCAL_PATH: "/usr/share/aclocal"
+          ACLOCAL: "aclocal -I /usr/share/aclocal"
         run: |
           export PATH="$HOME/.local/bin:$PATH"
           yes | buildozer android debug
