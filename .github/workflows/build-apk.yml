@@ -44,30 +44,20 @@ jobs:
           ACLOCAL: "aclocal -I /usr/share/aclocal"
           AUTORECONF: "${{ runner.temp }}/autoreconf-lt.sh"
         run: |
-          if [ ! -f /usr/bin/aclocal.orig ]; then
-            sudo cp /usr/bin/aclocal /usr/bin/aclocal.orig
-          fi
-          sudo tee /usr/bin/aclocal > /dev/null <<'ACLOCAL_EOF'
-          #!/usr/bin/env bash
-          set -e
-          if [ -d "/usr/share/aclocal" ]; then
-            exec /usr/bin/aclocal.orig -I /usr/share/aclocal "$@"
-          fi
-          exec /usr/bin/aclocal.orig "$@"
-          ACLOCAL_EOF
-          sudo chmod +x /usr/bin/aclocal
           if [ ! -f /usr/bin/autoreconf.orig ]; then
             sudo cp /usr/bin/autoreconf /usr/bin/autoreconf.orig
           fi
           sudo tee /usr/bin/autoreconf > /dev/null <<'AUTORECONF_EOF'
           #!/usr/bin/env bash
           set -e
-          if [ -f "configure.ac" ]; then
-            mkdir -p m4
-            if compgen -G "/usr/share/aclocal/lt*.m4" > /dev/null; then
-              cp -f /usr/share/aclocal/lt*.m4 m4/
+          if [ -f "configure.ac" ] && grep -q "LT_SYS_SYMBOL_USCORE" configure.ac; then
+            if [ -f "acinclude.m4" ] && grep -q "LT_SYS_SYMBOL_USCORE" acinclude.m4; then
+              :
+            elif [ -f "/usr/share/aclocal/ltsymbol.m4" ]; then
+              cat /usr/share/aclocal/ltsymbol.m4 >> acinclude.m4
+            else
+              printf '\nm4_ifndef([LT_SYS_SYMBOL_USCORE], [AC_DEFUN([LT_SYS_SYMBOL_USCORE], [])])\n' >> acinclude.m4
             fi
-            /usr/bin/aclocal -I m4 -I /usr/share/aclocal --force || true
           fi
           exec /usr/bin/autoreconf.orig "$@"
           AUTORECONF_EOF
