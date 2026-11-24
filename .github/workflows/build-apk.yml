@@ -48,11 +48,13 @@ jobs:
           cat <<'AUTORECONF_EOF' > "${{ runner.temp }}/bin/autoreconf"
           #!/usr/bin/env bash
           set -e
-          if [ -d "m4" ] && compgen -G "/usr/share/aclocal/lt*.m4" > /dev/null; then
-            cp -f /usr/share/aclocal/lt*.m4 m4/
-          fi
           if [ -f "configure.ac" ]; then
-            aclocal -I m4 -I /usr/share/aclocal --force || true
+            mkdir -p m4
+            if compgen -G "/usr/share/aclocal/lt*.m4" > /dev/null; then
+              cp -f /usr/share/aclocal/lt*.m4 m4/
+            fi
+            libtoolize --force --copy
+            aclocal -I m4 -I /usr/share/aclocal --force
           fi
           exec /usr/bin/autoreconf "$@"
           AUTORECONF_EOF
