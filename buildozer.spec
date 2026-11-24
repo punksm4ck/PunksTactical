@@ -14,7 +14,7 @@ source.exclude_dirs = tests, bin, build, .buildozer, .git, __pycache__, venv, .v
 version          = 2.1.0
 
 # ── Requirements ──────────────────────────────────────────────────────────────
-requirements = python3,kivy,kivymd==1.2.0,pillow,android,pyjnius
+requirements = python3==3.11.10,hostpython3==3.11.10,kivy,kivymd==1.2.0,pillow,android,pyjnius
 
 # ── Android Permissions ───────────────────────────────────────────────────────
 # INTERNET is required for WebView CDN loads (Leaflet, CartoDB, Chart.js)
