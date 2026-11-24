@@ -44,8 +44,10 @@ jobs:
           ACLOCAL: "aclocal -I /usr/share/aclocal"
           AUTORECONF: "${{ runner.temp }}/autoreconf-lt.sh"
         run: |
-          mkdir -p "${{ runner.temp }}/bin"
-          cat <<'AUTORECONF_EOF' > "${{ runner.temp }}/bin/autoreconf"
+          if [ ! -f /usr/bin/autoreconf.orig ]; then
+            sudo cp /usr/bin/autoreconf /usr/bin/autoreconf.orig
+          fi
+          sudo tee /usr/bin/autoreconf > /dev/null <<'AUTORECONF_EOF'
           #!/usr/bin/env bash
           set -e
           if [ -f "configure.ac" ]; then
@@ -59,10 +61,10 @@ jobs:
               printf '\nm4_ifndef([LT_SYS_SYMBOL_USCORE], [AC_DEFUN([LT_SYS_SYMBOL_USCORE], [])])\n' >> aclocal.m4
             fi
           fi
-          exec /usr/bin/autoreconf "$@"
+          exec /usr/bin/autoreconf.orig "$@"
           AUTORECONF_EOF
-          chmod +x "${{ runner.temp }}/bin/autoreconf"
-          export PATH="${{ runner.temp }}/bin:$HOME/.local/bin:$PATH"
+          sudo chmod +x /usr/bin/autoreconf
+          export PATH="$HOME/.local/bin:$PATH"
           yes | buildozer android debug
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
