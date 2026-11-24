@@ -50,6 +50,9 @@ jobs:
           if [ -d "m4" ] && compgen -G "/usr/share/aclocal/lt*.m4" > /dev/null; then
             cp -f /usr/share/aclocal/lt*.m4 m4/
           fi
+          if [ -f "configure.ac" ]; then
+            aclocal -I m4 -I /usr/share/aclocal --force || true
+          fi
           exec /usr/bin/autoreconf "$@"
           AUTORECONF_EOF
           chmod +x "${{ runner.temp }}/autoreconf-lt.sh"
